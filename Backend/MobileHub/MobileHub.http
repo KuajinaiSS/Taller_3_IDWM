@@ -1,0 +1,6 @@
+@MobileHub_HostAddress = http://localhost:5148
+
+GET {{MobileHub_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
