@@ -2,6 +2,7 @@
 
 using DotNetEnv;
 using Microsoft.AspNetCore.Mvc;
+using MobileHub.DTO;
 using Octokit;
 
 namespace MobileHub.Controllers
@@ -27,7 +28,18 @@ namespace MobileHub.Controllers
 
             var commits = (await client.Repository.Commit.GetAll("KuajinaiSS", "Taller_3_IDWM")).ToList();
             return commits;
-
         }
+
+        //Register
+        [HttpPost]
+        public async Task<ActionResult> Register(RegisterDto registerDto)
+        {
+            return Ok();
+        }
+
+
+
+
+
     }
 } 
