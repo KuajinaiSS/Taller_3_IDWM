@@ -1,4 +1,22 @@
+using DotNetEnv;
+
 var builder = WebApplication.CreateBuilder(args);
+
+Env.Load();
+var ip = Env.GetString("LOCAL_IP");
+
+var mobileHubOrigin = "_mobilehub";
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: mobileHubOrigin,
+        policy =>
+        {
+            policy.WithOrigins(ip)
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+        });
+});
 
 // Add services to the container.
 
@@ -17,6 +35,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors(mobileHubOrigin);
 
 app.UseAuthorization();
 
