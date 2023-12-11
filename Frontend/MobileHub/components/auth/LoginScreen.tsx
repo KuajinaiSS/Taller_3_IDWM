@@ -3,6 +3,7 @@ import {Image, StyleSheet, Text} from "react-native";
 import {Button, HelperText, TextInput} from "react-native-paper";
 // import Styles from "../../constants/Styles";
 import {useState} from "react";
+import {Link} from "expo-router";
 
 const LoginScreen = () => {
     const [email, setEmail] = useState("");
@@ -46,14 +47,17 @@ const LoginScreen = () => {
                            <TextInput.Icon icon={HidePassword ? "eye-off" : "eye"} onPress={handleShowPassword}/>
                        }/>
 
-            
+
             <HelperText style={styles.helperText} type={"error"} visible={true}>
                 Email o la Contraseña es Invalida :c
             </HelperText>
-            <Button style={styles.button} icon="login" mode="contained" onPress={handleSubmit}>
-                Iniciar sesión
-            </Button>
-            
+
+
+            <Link href={"/home/"} asChild>
+                <Button style={styles.button} icon="login" mode="contained" onPress={handleSubmit}>
+                    Iniciar sesión
+                </Button>
+            </Link>
 
             <Button style={styles.button} icon="" mode={"outlined"} onPress={() => console.log('Register')}>
                 Registrarse
