@@ -13,9 +13,8 @@ namespace MobileHub.Controllers
     public class RepositoriesController : ControllerBase
     {
         [HttpGet]
-        public async Task<ActionResult<IReadOnlyList<GitHubCommit>>> Get() // para usar commits <GitHubCommit>, para repositorios <Repository>
+        public async Task<ActionResult<IEnumerable<RepositoryDto>>> GetAll() // para usar commits <GitHubCommit>, para repositorios <Repository>
         {
-            Env.Load();
 
             var client = new GitHubClient(new ProductHeaderValue("MobileHub"));
             var myToken = Env.GetString("GITHUB_ACCESS_TOKEN");
@@ -23,23 +22,41 @@ namespace MobileHub.Controllers
 
             client.Credentials = TokenCredential;
 
-            // var repositories = (await client.Repository.GetAllForUser("KuajinaiSS")).ToList();
-            // return repositories;
+            var repositories = await client.Repository.GetAllForUser("KuajinaiSS"); // Dizkm8
 
-            var commits = (await client.Repository.Commit.GetAll("KuajinaiSS", "Taller_3_IDWM")).ToList();
-            return commits;
+            repositories = repositories.OrderByDescending(repository => repository.CreatedAt).ToList();
+
+            var getCommitsTasks = repositories.Select( r => GetCommitAmountByRepository(client, r.Name));
+
+            var commitsResults = await Task.WhenAll(getCommitsTasks);
+
+            var mappedRepositories = repositories.Select((repository,index) =>
+            {
+                var entity = new RepositoryDto
+                {
+                    name = repository.Name,
+                    CreatedAt = repository.CreatedAt,
+                    UpdateAt = repository.UpdatedAt,
+                    CommitsAmount = commitsResults[index]
+                };
+                return entity;
+            });
+
+            // mappedRepositories = mappedRepositories.OrderByDescending(repository => repository.CreatedAt).ToList();
+
+
+            return Ok(mappedRepositories);
+
         }
 
-        //Register
-        [HttpPost]
-        public async Task<ActionResult> Register(RegisterDto registerDto)
+        private async Task<int> GetCommitAmountByRepository(GitHubClient client, string repositoryName)
         {
-            return Ok();
+            var commits = await client.Repository.Commit.GetAll("KuajinaiSS", repositoryName);
+
+            if(commits is null) return 0;
+            return commits.Count();
         }
-
-
-
 
 
     }
-} 
+}
