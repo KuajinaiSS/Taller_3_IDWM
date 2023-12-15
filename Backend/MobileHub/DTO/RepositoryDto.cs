@@ -2,7 +2,7 @@ namespace MobileHub.DTO
 {
     public class RepositoryDto
     {
-        public string Name { get; set; } = null!;
+        public string name { get; set; } = null!;
 
         public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.Now;
 

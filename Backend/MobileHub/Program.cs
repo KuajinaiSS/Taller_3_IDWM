@@ -1,4 +1,6 @@
 using DotNetEnv;
+using Microsoft.EntityFrameworkCore;
+using MobileHub.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,6 +29,9 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+// codigo base de datos
+builder.Services.AddDbContext<DataContext>(options => options.UseSqlite("Data Source=MobileHub.db"));
 
 var app = builder.Build();
 

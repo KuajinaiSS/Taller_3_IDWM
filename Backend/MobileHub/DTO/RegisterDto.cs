@@ -6,7 +6,7 @@ namespace MobileHub.DTO
     public class RegisterDto
     {
         [Required]
-        public string Name { get; set; } = null!;
+        public string Username { get; set; } = null!;
 
         [Required]
         [UCNEmail (ErrorMessage = "Email invalido")]
