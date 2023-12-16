@@ -56,7 +56,7 @@ namespace MobileHub.Src.Controllers
 
             await _context.SaveChangesAsync();
 
-            return Ok("Usuario actualizado exitosamente" + user.Username + " " + user.Email + " " + user.yearBirth + " " + user.Rut);
+            return Ok("Usuario actualizado exitosamente " + user.Username + " " + user.Email + " " + user.yearBirth + " " + user.Rut);
         }
 
     }

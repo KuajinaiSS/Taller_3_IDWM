@@ -7,7 +7,9 @@ using Microsoft.IdentityModel.Tokens;
 using MobileHub.Data;
 using MobileHub.DTO;
 using MobileHub.Models;
+using DotNetEnv;
 using MobileHub.Src.Services.interfaces;
+
 
 namespace MobileHub.Src.Controllers
 {
@@ -32,7 +34,7 @@ namespace MobileHub.Src.Controllers
         {
             var user = await _context.Users.FirstOrDefaultAsync(x => x.Email == loginDto.Email);
             if (user is null) return NotFound("Usuario no encontrado");
-            
+
             // var validPassword = BCrypt.Net.BCrypt.Verify(loginDto.Rut, user.Rut);
             var validPassword = loginDto.Rut == user.Rut;
             if (!validPassword) return BadRequest("Rut invalido");
@@ -77,9 +79,9 @@ namespace MobileHub.Src.Controllers
                 new ("email", user.Email)
             };
 
+            var sectret = Env.GetString("TOKEN").ToString();
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(sectret));
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
-                    _configuration.GetSection("AppSettings:Token").Value!));
 
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature);
             var token = new JwtSecurityToken(
