@@ -6,7 +6,7 @@ using MobileHub.Data;
 
 #nullable disable
 
-namespace MobileHub.Data.Migrations
+namespace MobileHub.Src.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
     partial class DataContextModelSnapshot : ModelSnapshot
@@ -23,6 +23,10 @@ namespace MobileHub.Data.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("TEXT");
 

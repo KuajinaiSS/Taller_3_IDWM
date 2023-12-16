@@ -2,10 +2,10 @@
 
 #nullable disable
 
-namespace MobileHub.Data.Migrations
+namespace MobileHub.Src.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class UserEntityAdd : Migration
+    public partial class UserMigrations : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -17,6 +17,7 @@ namespace MobileHub.Data.Migrations
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Username = table.Column<string>(type: "TEXT", nullable: false),
+                    Password = table.Column<string>(type: "TEXT", nullable: false),
                     Email = table.Column<string>(type: "TEXT", nullable: false),
                     Rut = table.Column<string>(type: "TEXT", nullable: false),
                     yearBirth = table.Column<int>(type: "INTEGER", nullable: false)

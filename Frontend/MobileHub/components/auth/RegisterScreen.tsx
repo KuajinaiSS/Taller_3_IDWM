@@ -3,8 +3,13 @@ import {Image, ScrollView, StyleSheet, Text} from "react-native";
 import {Button, HelperText, TextInput} from "react-native-paper";
 // import Styles from "../../constants/Styles";
 import {useState} from "react";
-import {Link} from "expo-router";
+import {Link, router} from "expo-router";
 import axios from "axios";
+import * as SecureStore from "expo-secure-store";
+
+async function saveToken(key, value) {
+    await SecureStore.setItemAsync(key, value);
+}
 
 const RegisterScreen = () => {
     const [email, setEmail] = useState("");
@@ -23,7 +28,7 @@ const RegisterScreen = () => {
         email: '',
         rut: '',
         username: '',
-        bornYear: 0,
+        yearBirth: 0,
     };
 
     const handleEmailChange = (email: string) => {
@@ -56,19 +61,20 @@ const RegisterScreen = () => {
             return;
         }
 
-
         data.email = email;
         data.username = name;
         data.rut = rut;
-        data.bornYear = parseInt(bornYear);
+        data.yearBirth = parseInt(bornYear);
         console.log(data);
 
         axios.post(url, data)
             .then((response) => {
                 console.log(response.data);
+                saveToken("token", response.data);
+                router.replace("/home");
             })
             .catch((error) => {
-                console.log(error.response.data);
+                console.log("Error: "+ error.response.data);
             });
     };
 
@@ -103,16 +109,10 @@ const RegisterScreen = () => {
                 </HelperText>
 
 
-                <Button style={styles.button} icon="login" mode="contained" onPress={handleSubmit}>
-                    Registrarse TRU
+                <Button style={styles.button} icon="account-plus" mode="contained" onPress={handleSubmit}>
+                    Registrarse
                 </Button>
 
-
-                <Link href={"/home/"} asChild>
-                    <Button style={styles.button} icon="login" mode="contained" onPress={handleSubmit}>
-                        Registrarse
-                    </Button>
-                </Link>
 
             </ScrollView>
 

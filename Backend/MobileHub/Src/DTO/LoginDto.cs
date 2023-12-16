@@ -8,7 +8,7 @@ namespace MobileHub.DTO
         public string Email { get; set; } = string.Empty;
 
         [Required (ErrorMessage = "El campo Contraseña es obligatorio para iniciar sesión")]
-        public string Rut { get; set; } = string.Empty;
+        public string Password { get; set; } = string.Empty;
         
     }
 }

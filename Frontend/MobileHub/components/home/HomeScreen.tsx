@@ -1,9 +1,11 @@
-import {ActivityIndicator, Button, Card, Text} from 'react-native-paper';
+import {ActivityIndicator, Button, Card, Text, Appbar} from 'react-native-paper';
 import {ScrollView, StyleSheet} from "react-native";
 import {SafeAreaView} from "react-native-safe-area-context";
 import {useEffect, useState} from "react";
 import {Repository} from "../../models/Repository";
 import axios from "axios";
+import {router} from "expo-router";
+import * as SecureStore from 'expo-secure-store';
 
 const HomeScreen = () => {
 
@@ -17,8 +19,10 @@ const HomeScreen = () => {
         axios.get(url)
             .then((response) => {
                 setRepositories(response.data);
+
             })
             .catch((error) => {
+
                 console.log(error);
             })
             .finally(() => {
@@ -26,6 +30,15 @@ const HomeScreen = () => {
                 console.log("FINALLY");
             });
     }, []);
+
+    const removeToken = async () => {
+        try {
+            await SecureStore.deleteItemAsync('token');
+            console.log('Token eliminado exitosamente');
+        } catch (error) {
+            console.error('Error al eliminar el token:', error);
+        }
+    };
 
     if (isLoading) {
         return (
@@ -37,33 +50,46 @@ const HomeScreen = () => {
         );
     }
 
+    const handleLogout = async () => {
+        await removeToken();
+        router.replace('/');
+    }
+
     return (
-        <SafeAreaView style={styles.container}>
-            <Text variant={"displaySmall"}>Repositorios</Text>
+        <>
+            <Appbar.Header style={styles.appBar}>
+                <Appbar.Content title="Repositorios"/>
+                <Appbar.Action icon="account-edit" onPress={() => console.log("LoL")}/>
+                <Appbar.Action icon="exit-to-app" onPress={handleLogout}/>
+            </Appbar.Header>
 
-            <ScrollView style={styles.scrollView}>
-                {repositories.map((repository) => {
-                    return (
-                        <Card style={styles.card} key={repository.name}>
-                            <Card.Title title={repository.name} titleVariant={"headlineSmall"}/>
+            <SafeAreaView style={styles.container}>
 
-                            <Card.Content>
-                                <Text variant={"bodySmall"}>Creado el: {repository.createdAt.split("T")[0]}</Text>
-                                <Text variant={"bodySmall"}>Actualizado el: {repository.updateAt.split("T")[0]}</Text>
-                                <Text variant={"bodySmall"}>Commits: {repository.commitsAmount}</Text>
-                            </Card.Content>
+                <ScrollView style={styles.scrollView}>
+                    {repositories.map((repository) => {
+                        return (
+                            <Card style={styles.card} key={repository.name}>
+                                <Card.Title title={repository.name} titleVariant={"headlineSmall"}/>
 
-                            <Card.Actions>
-                                <Button mode={"contained"} onPress={() => console.log("Mas detalles " + repository.name)}>
-                                    <Text variant={"bodySmall"}> Ver detalles</Text>
-                                </Button>
-                            </Card.Actions>
-                        </Card>
-                    );
-                })}
-            </ScrollView>
+                                <Card.Content>
+                                    <Text variant={"bodySmall"}>Creado el: {repository.createdAt.split("T")[0]}</Text>
+                                    <Text variant={"bodySmall"}>Actualizado
+                                        el: {repository.updateAt.split("T")[0]}</Text>
+                                    <Text variant={"bodySmall"}>Commits: {repository.commitsAmount}</Text>
+                                </Card.Content>
 
-        </SafeAreaView>
+                                <Card.Actions>
+                                    <Button mode={"contained"}
+                                            onPress={() => console.log("Mas detalles " + repository.name)}>
+                                        <Text variant={"bodySmall"}> Ver detalles</Text>
+                                    </Button>
+                                </Card.Actions>
+                            </Card>
+                        );
+                    })}
+                </ScrollView>
+            </SafeAreaView>
+        </>
     );
 
 }
@@ -118,6 +144,11 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgba(0,0,0,0.07)',
         alignItems: 'center',
         justifyContent: 'center',
-    }
+    },
+    appBar: {
+        width: '100%',
+        backgroundColor: "#fcaf43",// naranjo
+
+    },
 });
 export default HomeScreen;

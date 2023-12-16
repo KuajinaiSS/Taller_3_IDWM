@@ -1,12 +1,30 @@
 import {SafeAreaView} from "react-native-safe-area-context";
 import {Image, StyleSheet, Text} from "react-native";
 import {Button, HelperText, TextInput} from "react-native-paper";
-// import Styles from "../../constants/Styles";
+import * as SecureStore from 'expo-secure-store';
 import {useContext, useEffect, useState} from "react";
-import {Link} from "expo-router";
+import {Link, router} from "expo-router";
 import axios from "axios";
 
+async function saveToken(key, value) {
+    await SecureStore.setItemAsync(key, value);
+}
+
+async function getValueFor(key) {
+    let result = await SecureStore.getItemAsync(key);
+    if (result) {
+        alert("🔐 Here's your value reditect to Home🔐 \n: " + result);
+        return result;
+    } else {
+        return null;
+    }
+}
+
+
 const LoginScreen = () => {
+    const [key, onChangeKey] = useState('');
+    const [value, onChangeValue] = useState('');
+
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [HidePassword, setHidePassword] = useState(true);
@@ -18,9 +36,19 @@ const LoginScreen = () => {
 
     const data = {
         email: '',
-        rut: ''
+        password: ''
     };
 
+    useEffect(() => {
+        const fetchToken = async () => {
+            const token = await getValueFor("token");
+            if (token) {
+                router.replace("/home");
+                console.log("Token: " + token);
+            }
+        };
+        fetchToken();
+    }, []);
 
     const handleEmailChange = (email: string) => {
         setEmail(email);
@@ -45,13 +73,14 @@ const LoginScreen = () => {
             return;
         }
 
-        data.rut = password;
         data.email = email;
+        data.password = password;
 
         axios.post(url, data)
             .then((response) => {
                 console.log(response.data);
-                localStorage.setItem("token", response.data.token);
+                saveToken("token", response.data);
+                router.replace("/home");
             })
             .catch((error) => {
                 console.log(error.response.data);
@@ -85,14 +114,8 @@ const LoginScreen = () => {
 
 
             <Button style={styles.button} icon="login" mode="contained" onPress={handleSubmit}>
-                Iniciar sesión TRU
+                Iniciar sesión
             </Button>
-
-            <Link href={"/home/"} asChild>
-                <Button style={styles.button} icon="login" mode="contained" onPress={handleSubmit}>
-                    Iniciar sesión
-                </Button>
-            </Link>
 
         </SafeAreaView>
     );

@@ -33,13 +33,14 @@ builder.Services.AddSwaggerGen();
 // JWT
 builder.Services.AddAuthentication().AddJwtBearer(opt =>
 {
+    var secret = Env.GetString("TOKEN").ToString();
     opt.TokenValidationParameters = new TokenValidationParameters
     {
+        
         ValidateIssuerSigningKey = true,
         ValidateIssuer = false,
         ValidateAudience = false,
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
-            builder.Configuration.GetSection("AppSettings:Token").Value!))
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret))
     };
 });
 

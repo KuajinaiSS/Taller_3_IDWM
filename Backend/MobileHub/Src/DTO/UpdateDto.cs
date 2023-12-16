@@ -9,8 +9,7 @@ namespace MobileHub.DTO
         [UCNEmail (ErrorMessage = "Email invalido")]
         public string Email { get; set; } = null!;
 
-        [Rut (ErrorMessage = "Rut invalido")]
-        public string Rut { get; set; } = null!;
+        public string Password { get; set; } = null!;
 
         [Date (ErrorMessage = "Fecha invalida")]
         public int yearBirth { get; set; }

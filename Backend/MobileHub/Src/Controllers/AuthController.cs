@@ -8,7 +8,6 @@ using MobileHub.Data;
 using MobileHub.DTO;
 using MobileHub.Models;
 using DotNetEnv;
-using MobileHub.Src.Services.interfaces;
 
 
 namespace MobileHub.Src.Controllers
@@ -35,9 +34,8 @@ namespace MobileHub.Src.Controllers
             var user = await _context.Users.FirstOrDefaultAsync(x => x.Email == loginDto.Email);
             if (user is null) return NotFound("Usuario no encontrado");
 
-            // var validPassword = BCrypt.Net.BCrypt.Verify(loginDto.Rut, user.Rut);
-            var validPassword = loginDto.Rut == user.Rut;
-            if (!validPassword) return BadRequest("Rut invalido");
+            var validPassword = BCrypt.Net.BCrypt.Verify(loginDto.Password, user.Password);
+            if (!validPassword) return BadRequest("Contraseña invalida");
 
             var token = CreateToken(user);
 
@@ -53,16 +51,16 @@ namespace MobileHub.Src.Controllers
         {
             var user = await _context.Users.FirstOrDefaultAsync(x => x.Email == registerDto.Email);
             if (user is not null) return BadRequest("Email ya registrado");
-
-            // string rutHash = BCrypt.Net.BCrypt.HashPassword(registerDto.Rut);
+            var userRut = await _context.Users.FirstOrDefaultAsync(x => x.Rut == registerDto.Rut);
+            if (userRut is not null) return BadRequest("Rut ya registrado");
 
             var newUser = new User
             {
                 Username = registerDto.Username,
                 Email = registerDto.Email,
-                // Rut = rutHash,
                 Rut = registerDto.Rut,
-                yearBirth = registerDto.yearBirth
+                yearBirth = registerDto.yearBirth,
+                Password = BCrypt.Net.BCrypt.HashPassword(registerDto.Rut)
             };
 
             var createdUser = (await _context.Users.AddAsync(newUser)).Entity;

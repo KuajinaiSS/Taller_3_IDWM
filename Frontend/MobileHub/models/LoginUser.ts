@@ -1,4 +1,4 @@
 export interface Repository {
     email: string;
-    rut: string;
+    password: string;
 }

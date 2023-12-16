@@ -7,11 +7,11 @@ using MobileHub.Data;
 
 #nullable disable
 
-namespace MobileHub.Data.Migrations
+namespace MobileHub.Src.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20231215212820_UserEntityAdd")]
-    partial class UserEntityAdd
+    [Migration("20231216181115_UserMigrations")]
+    partial class UserMigrations
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -26,6 +26,10 @@ namespace MobileHub.Data.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("TEXT");
 

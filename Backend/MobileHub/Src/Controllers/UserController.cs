@@ -49,14 +49,14 @@ namespace MobileHub.Src.Controllers
                 user.yearBirth = updateDto.yearBirth;
             }
 
-            if (!string.IsNullOrEmpty(updateDto.Rut))
+            if (!string.IsNullOrEmpty(updateDto.Password))
             {
-                user.Rut = updateDto.Rut;
+                user.Password = BCrypt.Net.BCrypt.HashPassword(updateDto.Password);
             }
 
             await _context.SaveChangesAsync();
 
-            return Ok("Usuario actualizado exitosamente " + user.Username + " " + user.Email + " " + user.yearBirth + " " + user.Rut);
+            return Ok("Usuario actualizado exitosamente User" + user.Username + "\nEmail: " + user.Email + "\nAño: " + user.yearBirth + "\nPass: " + user.Password);
         }
 
     }
