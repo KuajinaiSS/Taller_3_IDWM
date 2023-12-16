@@ -5,6 +5,7 @@
 - .NET [EF CLI](https://www.nuget.org/packages/dotnet-ef/)
 - git [2.33.0](https://git-scm.com/downloads) o superior.
 - Node.js y npm instalados
+- Puerto 5148 Libre
 
     
 ## BACKEND
@@ -39,13 +40,15 @@ dotnet ef database update
 ```bash
 dotnet watch --no-hot-reload
 ```
+NO CIERRES LA TERMINAL
 
 ## FRONTEND
 #### Instalación del Frontend
+Abrimos otra terminal y nos dirijiremos al MobileHub del frontend
 
 1. Accede al directorio del frontend:
 ```bash
-cd ..\..\frontend\MobileHub
+cd .\Taller_3_IDWM\Frontend\MobileHub\
 ```
 
 2. Instala las dependencias
