@@ -40,13 +40,15 @@ dotnet ef database update
 ```bash
 dotnet watch --no-hot-reload
 ```
+NO CIERRES LA TERMINAL
 
 ## FRONTEND
 #### Instalación del Frontend
+Abrimos otra terminal y nos dirijiremos al MobileHub del frontend
 
 1. Accede al directorio del frontend:
 ```bash
-cd ..\..\frontend\MobileHub
+cd .\Taller_3_IDWM\Frontend\MobileHub\
 ```
 
 2. Instala las dependencias
