@@ -12,7 +12,7 @@
 
 1. Clona el repositorio:
 ```bash
-https://github.com/KuajinaiSS/Taller_3_IDWM
+git clone https://github.com/KuajinaiSS/Taller_3_IDWM
 ```
 
 2. accede a la carpeta
