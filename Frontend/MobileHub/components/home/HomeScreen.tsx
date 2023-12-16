@@ -10,7 +10,7 @@ const HomeScreen = () => {
     const [repositories, setRepositories] = useState<Repository[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
-    const url = "http://192.168.4.43:5148/Repositories"; // donde se levanto el Backend con /<controlador>
+    const url = "http://192.168.4.43:5148/Repositories"; // donde se levantó el Backend con /<controlador>
 
     useEffect(() => {
         setIsLoading(true);

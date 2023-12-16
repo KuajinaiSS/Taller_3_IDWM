@@ -12,6 +12,8 @@ namespace MobileHub.Controllers
 
     public class RepositoriesController : ControllerBase
     {
+
+        // la ruta es localhost:5001/api/repositories (GET)
         [HttpGet]
         public async Task<ActionResult<IEnumerable<RepositoryDto>>> GetAll() // para usar commits <GitHubCommit>, para repositorios <Repository>
         {

@@ -28,16 +28,17 @@ const HomeScreen = () => {
             <Image source={require('../assets/images/MobileHub.png')} style={styles.image}/>
 
 
-            <Link href = "/auth/login" asChild>
+            <Link href="/auth/login" asChild>
                 <Button style={styles.button} icon="login" mode="contained" onPress={() => console.log('Login')}>
                     Iniciar sesión
                 </Button>
             </Link>
 
-
-            <Button style={styles.button} icon="" mode={"outlined"} onPress={() => console.log('Register')}>
-                Registrarse
-            </Button>
+            <Link href={"/auth/register"} asChild>
+                <Button style={styles.button} icon="" mode={"outlined"} onPress={() => console.log('Register')}>
+                    Registrarse
+                </Button>
+            </Link>
 
         </SafeAreaView>
     );

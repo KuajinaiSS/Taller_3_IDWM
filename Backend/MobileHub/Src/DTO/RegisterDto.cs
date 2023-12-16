@@ -17,6 +17,7 @@ namespace MobileHub.DTO
         public string Rut { get; set; } = null!;
 
         [Required]
+        [Date (ErrorMessage = "Fecha invalida")]
         public int yearBirth { get; set; }
 
     }

@@ -18,6 +18,10 @@ namespace MobileHub.DataAnnotations
 
         public override bool IsValid(object? value)
         {
+            if(value is not string rut) return false;
+            var IsValidRut = new RegularExpressionAttribute(@"^\d{7,8}-[\dkK]$").IsValid(value);
+            if (!IsValidRut) return false;
+            
             return true;
         }
 
