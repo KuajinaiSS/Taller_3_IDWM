@@ -22,7 +22,7 @@ cd Backend/MobileHub
 
 3. Instala las dependencias
 ```bash
-npm install
+dotnet restore
 ```
 
 4. Configura el .env con tus valores
