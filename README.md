@@ -17,7 +17,7 @@ git clone https://github.com/KuajinaiSS/Taller_3_IDWM
 
 2. accede a la carpeta
 ```bash
-cd Backend/MobileHub
+cd .\Taller_3_IDWM\Backend\MobileHub\
 ```
 
 3. Instala las dependencias
