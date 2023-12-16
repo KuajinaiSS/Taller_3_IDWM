@@ -14,23 +14,27 @@
 ```bash
 https://github.com/KuajinaiSS/Taller_3_IDWM
 ```
+
 2. accede a la carpeta
 ```bash
-cd Backend
-cd MobileHub
+cd Backend/MobileHub
 ```
+
 3. Instala las dependencias
 ```bash
 npm install
 ```
+
 4. Configura el .env con tus valores
 ```bash
 copy .env.example .env
 ```
+
 5. Migra la base de datos
 ```bash
 dotnet ef database update
 ```
+
 6. Inicia el servidor de desarrollo
 ```bash
 dotnet watch --no-hot-reload
@@ -43,10 +47,12 @@ dotnet watch --no-hot-reload
 ```bash
 cd ..\..\frontend\MobileHub
 ```
+
 2. Instala las dependencias
 ```bash
 npm install
 ```
+
 3. Inicia el frontend
 ```bash
 npm run start
