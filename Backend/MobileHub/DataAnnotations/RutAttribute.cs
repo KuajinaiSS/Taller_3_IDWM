@@ -18,7 +18,7 @@ namespace MobileHub.DataAnnotations
 
         public override bool IsValid(object? value)
         {
-            return false;
+            return true;
         }
 
     }
