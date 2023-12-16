@@ -5,6 +5,7 @@
 - .NET [EF CLI](https://www.nuget.org/packages/dotnet-ef/)
 - git [2.33.0](https://git-scm.com/downloads) o superior.
 - Node.js y npm instalados
+- Puerto 5148 Libre
 
     
 ## BACKEND
