@@ -44,6 +44,8 @@ const LoginScreen = () => {
     const [HidePassword, setHidePassword] = useState(true);
     const [error, setError] = useState(false);
     const [msgError, setMsgError] = useState("");
+    const [loading, setLoading] = useState(false);
+    const [disabled, setDisabled] = useState(false);
 
     const data = {
         email: '',
@@ -101,9 +103,14 @@ const LoginScreen = () => {
      * Si los datos no son válidos, muestra un mensaje de error
      */
     const handleSubmit = () => {
+        setLoading(true);
+        setDisabled(true);
+
         if (!email || !password) {
             setMsgError("Por favor, rellene todos los campos");
             setError(true);
+            setLoading(false);
+            setDisabled(false);
             return;
         }
 
@@ -120,6 +127,10 @@ const LoginScreen = () => {
                 console.log(error.response.data);
                 setMsgError("Email o la Contraseña es Invalida :c");
                 setError(true);
+            })
+            .finally(() => {
+                setLoading(false);
+                setDisabled(false);
             });
     }
 
@@ -143,7 +154,7 @@ const LoginScreen = () => {
                 {msgError}
             </HelperText>
 
-            <Button style={styles.button} icon="login" mode="contained" onPress={handleSubmit}>
+            <Button style={styles.button} icon="login" mode="contained" onPress={handleSubmit} loading={loading} disabled={disabled}>
                 Iniciar sesión
             </Button>
         </SafeAreaView>

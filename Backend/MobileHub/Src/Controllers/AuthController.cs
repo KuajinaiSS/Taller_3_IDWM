@@ -12,6 +12,9 @@ using DotNetEnv;
 
 namespace MobileHub.Src.Controllers
 {
+    /***
+     * Controlador para la autenticacion de usuarios
+     */
     [ApiController]
     [Route("api/[controller]")]
     public class AuthController : ControllerBase

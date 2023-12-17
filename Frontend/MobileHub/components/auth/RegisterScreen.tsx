@@ -8,8 +8,8 @@ import * as SecureStore from "expo-secure-store";
 
 /**
  * Guarda el token en el almacenamiento seguro del dispositivo (SecureStore)
- * @param key nombre del token 
- * @param value valor del token 
+ * @param key nombre del token
+ * @param value valor del token
  */
 async function saveToken(key: string, value: any) {
     await SecureStore.setItemAsync(key, value);
@@ -36,6 +36,8 @@ const RegisterScreen = () => {
     const currentYear = new Date().getFullYear();
     const [error, setError] = useState(false);
     const [msgError, setMsgError] = useState("");
+    const [loading, setLoading] = useState(false);
+    const [disabled, setDisabled] = useState(false);
 
 
     /**
@@ -83,10 +85,12 @@ const RegisterScreen = () => {
      * si el backend responde con un token, guarda el token en el almacenamiento seguro del dispositivo (SecureStore) y redirige a la pantalla de inicio
      */
     const handleSubmit = () => {
-
+        setLoading(true)
         if (!email || !name || !rut || !bornYear) {
             setMsgError("Por favor, rellene todos los campos");
             setError(true);
+            setLoading(false);
+            setDisabled(false);
             return;
         }
 
@@ -103,8 +107,12 @@ const RegisterScreen = () => {
                 router.replace("/home");
             })
             .catch((error) => {
-                console.log("Error: "+ error.response.data);
+                console.log("Error: " + error.response.data);
+            }).finally(() => {
+                setLoading(false);
+                setDisabled(false);
             });
+
     };
 
 
@@ -138,7 +146,8 @@ const RegisterScreen = () => {
                 </HelperText>
 
 
-                <Button style={styles.button} icon="account-plus" mode="contained" onPress={handleSubmit}>
+                <Button style={styles.button} icon="account-plus" mode="contained" onPress={handleSubmit}
+                        loading={loading} disabled={disabled}>
                     Registrarse
                 </Button>
 
