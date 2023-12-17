@@ -1,13 +1,13 @@
 import {SafeAreaView} from "react-native-safe-area-context";
-import {Image, ScrollView, StyleSheet, Text} from "react-native";
+import {Image, ScrollView, StyleSheet, Text, View} from "react-native";
 import {Button, HelperText, TextInput} from "react-native-paper";
 // import Styles from "../../constants/Styles";
 import {useState} from "react";
-import {Link, router} from "expo-router";
+import {router} from "expo-router";
 import axios from "axios";
 import * as SecureStore from "expo-secure-store";
 
-async function saveToken(key, value) {
+async function saveToken(key: string, value: any) {
     await SecureStore.setItemAsync(key, value);
 }
 

@@ -9,6 +9,7 @@ import * as SecureStore from 'expo-secure-store';
 import {jwtDecode} from "jwt-decode";
 import {Commit} from "../../models/Commit";
 
+
 const getTokenAndPrint = async () => {
     try {
         const token = await SecureStore.getItemAsync('token');
@@ -25,9 +26,8 @@ const HomeScreen = () => {
     const url = "http://192.168.4.43:5148/Repositories";
     const [commits, setCommits] = useState<Commit[]>([]);
 
-    async function getValueFor(key) {
+    async function getValueFor(key: any) {
         const result = await SecureStore.getItemAsync(key);
-        setToken(result);
     }
 
     const Newdata = {
@@ -82,7 +82,6 @@ const HomeScreen = () => {
             setIsLoading(true);
             try {
                 const token = await getTokenAndPrint();
-                setToken(token);
 
                 const response = await axios.get(url);
                 setRepositories(response.data);

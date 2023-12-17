@@ -1,8 +1,6 @@
 import {SafeAreaView} from "react-native-safe-area-context";
 import {Button, Text} from "react-native-paper";
 import {Image, StyleSheet} from "react-native";
-
-import Colors from "../constants/Colors";
 import {Link} from "expo-router";
 
 const styles = StyleSheet.create({

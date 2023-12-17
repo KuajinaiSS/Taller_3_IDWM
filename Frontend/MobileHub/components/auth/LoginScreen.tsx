@@ -6,7 +6,7 @@ import {useEffect, useState} from "react";
 import {router} from "expo-router";
 import axios from "axios";
 
-const saveToken = async (key, value) => {
+const saveToken = async (key: any, value: any) => {
     try {
         await SecureStore.setItemAsync(key, value);
     } catch (error) {
@@ -14,7 +14,7 @@ const saveToken = async (key, value) => {
     }
 }
 
-const getValueFor = async (key) => {
+const getValueFor = async (key: any) => {
     try {
         return await SecureStore.getItemAsync(key);
     } catch (error) {
@@ -47,12 +47,12 @@ const LoginScreen = () => {
         fetchToken();
     }, []);
 
-    const handleEmailChange = (email) => {
+    const handleEmailChange = (email: any) => {
         setEmail(email);
         console.log(email);
     }
 
-    const handlePasswordChange = (password) => {
+    const handlePasswordChange = (password: string) => {
         setPassword(password);
         console.log(password);
     }
