@@ -24,13 +24,13 @@ const getValueFor = async (key: any) => {
 }
 
 const LoginScreen = () => {
+    const url = "http://192.168.4.43:5148/api/Auth/login";
+
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [HidePassword, setHidePassword] = useState(true);
     const [error, setError] = useState(false);
     const [msgError, setMsgError] = useState("");
-
-    const url = "http://192.168.4.43:5148/api/Auth/login";
 
     const data = {
         email: '',

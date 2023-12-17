@@ -12,6 +12,7 @@ async function saveToken(key: string, value: any) {
 }
 
 const RegisterScreen = () => {
+    const url = "http://192.168.4.43:5148/api/Auth/register";
     const data = {
         email: '',
         rut: '',
@@ -25,13 +26,8 @@ const RegisterScreen = () => {
     const [rut, setRut] = useState("");
     const [bornYear, setBornYear] = useState("");
     const currentYear = new Date().getFullYear();
-
     const [error, setError] = useState(false);
     const [msgError, setMsgError] = useState("");
-
-
-    const url = "http://192.168.4.43:5148/api/Auth/register";
-
 
     const handleEmailChange = (email: string) => {
         setEmail(email);
