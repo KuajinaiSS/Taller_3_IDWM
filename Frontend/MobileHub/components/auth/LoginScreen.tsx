@@ -132,7 +132,7 @@ const LoginScreen = () => {
                        placeholderTextColor={"#B2B2B2"} autoComplete={"email"} mode={"outlined"} value={email}
                        onChangeText={handleEmailChange}/>
 
-            <TextInput style={styles.input} label="Contraseña" placeholder={"207344842"}
+            <TextInput style={styles.input} label="Contraseña" placeholder={"20734484-2"}
                        placeholderTextColor={"#B2B2B2"} autoComplete={"email"} mode={"outlined"} value={password}
                        onChangeText={handlePasswordChange} secureTextEntry={HidePassword}
                        right={

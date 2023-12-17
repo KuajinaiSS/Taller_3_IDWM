@@ -128,7 +128,7 @@ const RegisterScreen = () => {
                            value={bornYear} keyboardType="numeric"
                            onChangeText={handleBornYearChange}/>
 
-                <TextInput style={styles.input} label="Rut" placeholder={"207344842"}
+                <TextInput style={styles.input} label="Rut" placeholder={"20734484-2"}
                            placeholderTextColor={"#B2B2B2"} mode={"outlined"} value={rut}
                            onChangeText={handleRutChange}/>
 
