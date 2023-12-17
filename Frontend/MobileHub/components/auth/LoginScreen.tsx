@@ -2,33 +2,31 @@ import {SafeAreaView} from "react-native-safe-area-context";
 import {Image, StyleSheet, Text} from "react-native";
 import {Button, HelperText, TextInput} from "react-native-paper";
 import * as SecureStore from 'expo-secure-store';
-import {useContext, useEffect, useState} from "react";
-import {Link, router} from "expo-router";
+import {useEffect, useState} from "react";
+import {router} from "expo-router";
 import axios from "axios";
 
-async function saveToken(key, value) {
-    await SecureStore.setItemAsync(key, value);
+const saveToken = async (key, value) => {
+    try {
+        await SecureStore.setItemAsync(key, value);
+    } catch (error) {
+        console.error('Error al guardar el token:', error);
+    }
 }
 
-async function getValueFor(key) {
-    let result = await SecureStore.getItemAsync(key);
-    if (result) {
-        alert("🔐 Here's your value reditect to Home🔐 \n: " + result);
-        return result;
-    } else {
+const getValueFor = async (key) => {
+    try {
+        return await SecureStore.getItemAsync(key);
+    } catch (error) {
+        console.error('Error al obtener el token:', error);
         return null;
     }
 }
 
-
 const LoginScreen = () => {
-    const [key, onChangeKey] = useState('');
-    const [value, onChangeValue] = useState('');
-
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [HidePassword, setHidePassword] = useState(true);
-
     const [error, setError] = useState(false);
     const [msgError, setMsgError] = useState("");
 
@@ -44,18 +42,17 @@ const LoginScreen = () => {
             const token = await getValueFor("token");
             if (token) {
                 router.replace("/home");
-                console.log("Token: " + token);
             }
         };
         fetchToken();
     }, []);
 
-    const handleEmailChange = (email: string) => {
+    const handleEmailChange = (email) => {
         setEmail(email);
         console.log(email);
     }
 
-    const handlePasswordChange = (password: string) => {
+    const handlePasswordChange = (password) => {
         setPassword(password);
         console.log(password);
     }
@@ -64,7 +61,6 @@ const LoginScreen = () => {
         setHidePassword(!HidePassword);
         console.log("Show password");
     }
-
 
     const handleSubmit = () => {
         if (!email || !password) {
@@ -89,10 +85,8 @@ const LoginScreen = () => {
             });
     }
 
-
     return (
         <SafeAreaView style={styles.container}>
-
             <Image source={require('../../assets/images/MobileHub.png')} style={styles.image}/>
             <Text style={styles.title}> ¡Bienvenido! </Text>
 
@@ -107,20 +101,16 @@ const LoginScreen = () => {
                            <TextInput.Icon icon={HidePassword ? "eye-off" : "eye"} onPress={handleShowPassword}/>
                        }/>
 
-
             <HelperText style={styles.helperText} type={"error"} visible={error}>
                 {msgError}
             </HelperText>
 
-
             <Button style={styles.button} icon="login" mode="contained" onPress={handleSubmit}>
                 Iniciar sesión
             </Button>
-
         </SafeAreaView>
     );
 }
-
 
 const styles = StyleSheet.create({
     container: {

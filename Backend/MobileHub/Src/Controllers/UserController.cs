@@ -18,6 +18,17 @@ namespace MobileHub.Src.Controllers
             _context = context;
         }
 
+        // buscar usuario por email
+        // la ruta es localhost:5001/api/user/{email} (GET)
+        [HttpGet("{email}")]
+        public async Task<ActionResult<User>> GetByEmail(string email)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(x => x.Email == email);
+            if (user == null) return NotFound();
+            return Ok(user);
+        }
+
+
         // la ruta es localhost:5001/api/user (GET)
         [HttpGet]
         public async Task<ActionResult<IEnumerable<User>>> GetAll()
