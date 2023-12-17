@@ -9,7 +9,11 @@ import * as SecureStore from 'expo-secure-store';
 import {jwtDecode} from "jwt-decode";
 import {Commit} from "../../models/Commit";
 
-
+/**
+ * Guarda el token en el almacenamiento seguro del dispositivo (SecureStore)
+ * @param key nombre del token
+ * @param value valor del token
+ */
 const getTokenAndPrint = async () => {
     try {
         const token = await SecureStore.getItemAsync('token');
@@ -21,14 +25,21 @@ const getTokenAndPrint = async () => {
     }
 };
 
-
+/**
+ * Pantalla de inicio
+ */
 const HomeScreen = () => {
     const url = "http://192.168.4.43:5148/Repositories";
     const [commits, setCommits] = useState<Commit[]>([]);
-
-    async function getValueFor(key: any) {
-        const result = await SecureStore.getItemAsync(key);
-    }
+    const [email, setEmail] = useState("");
+    const [name, setName] = useState("");
+    const [password, setPassword] = useState("");
+    const [bornYear, setBornYear] = useState("");
+    const [HidePassword, setHidePassword] = useState(true);
+    const [token, setToken] = useState("");
+    const [visible, setVisible] = useState(false);
+    const [repositories, setRepositories] = useState<Repository[]>([]);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const Newdata = {
         email: '',
@@ -44,39 +55,9 @@ const HomeScreen = () => {
         yearBirth: 0,
     };
 
-
-    const [email, setEmail] = useState("");
-    const [name, setName] = useState("");
-    const [password, setPassword] = useState("");
-    const [bornYear, setBornYear] = useState("");
-    const [HidePassword, setHidePassword] = useState(true);
-    const [token, setToken] = useState("");
-    const handleEmailChange = (email: string) => {
-        setEmail(email);
-        console.log(email);
-    }
-    const handleNameChange = (name: string) => {
-        setName(name);
-        console.log(name);
-    }
-    const handleBornYearChange = (bornYear: string) => {
-        const numericValue = bornYear.replace(/[^0-9]/g, '');
-        setBornYear(numericValue);
-    };
-    const handlePasswordChange = (password: string) => {
-        setPassword(password);
-        console.log(password);
-    }
-    const handleShowPassword = () => {
-        setHidePassword(!HidePassword);
-        console.log("Show password");
-    }
-
-    const [visible, setVisible] = useState(false);
-    const [repositories, setRepositories] = useState<Repository[]>([]);
-    const [isLoading, setIsLoading] = useState<boolean>(false);
-
-
+    /**
+     * Obtiene los datos del usuario logeado y los guarda en el estado Logeduser 
+     */
     useEffect(() => {
         const fetchData = async () => {
             setIsLoading(true);
@@ -95,6 +76,63 @@ const HomeScreen = () => {
         fetchData();
     }, []);
 
+
+    /**
+     * Obtiene el token del almacenamiento seguro del dispositivo (SecureStore)
+     * @param key nombre del token
+     */
+    
+    async function getValueFor(key: any) {
+        const result = await SecureStore.getItemAsync(key);
+    }
+
+    /**
+     * cambia el email del usuario 
+     * @param email email del usuario
+     */
+    const handleEmailChange = (email: string) => {
+        setEmail(email);
+        console.log(email);
+    }
+
+    /**
+     * cambia el nombre del usuario
+     * @param name nombre del usuario
+     */
+    const handleNameChange = (name: string) => {
+        setName(name);
+        console.log(name);
+    }
+
+    /**
+     * cambia el año de nacimiento del usuario
+     * @param bornYear año de nacimiento del usuario
+     */
+    const handleBornYearChange = (bornYear: string) => {
+        const numericValue = bornYear.replace(/[^0-9]/g, '');
+        setBornYear(numericValue);
+    };
+
+    /**
+     * cambia la contraseña del usuario
+     * @param password contraseña del usuario
+     */
+    const handlePasswordChange = (password: string) => {
+        setPassword(password);
+        console.log(password);
+    }
+
+    /**
+     * Actualiza el estado de HidePassword para mostrar o no la contraseña
+     */
+    const handleShowPassword = () => {
+        setHidePassword(!HidePassword);
+        console.log("Show password");
+    }
+
+    /**
+     * Elimina el token del almacenamiento seguro del dispositivo (SecureStore)
+     */
     const removeToken = async () => {
         try {
             await SecureStore.deleteItemAsync('token');
@@ -104,16 +142,29 @@ const HomeScreen = () => {
         }
     };
 
-    if (isLoading) {
-        return (
-            <SafeAreaView style={styles.loading}>
-                <Text variant={"displaySmall"}>Repositorios</Text>
-                <ActivityIndicator animating={true} color={"#000"} size={"large"}/>
-                <Text variant={"bodySmall"}>Cargando...</Text>
-            </SafeAreaView>
-        );
+    /**
+     * Actualiza los datos del usuario logeado
+     */
+    const handleEdit = async () => {
+        console.log(token);
+        const decodedToken = jwtDecode(token, {header: true});
+
     }
 
+    /**
+     * Cierra la sesión del usuario
+     * Elimina el token del almacenamiento seguro del dispositivo (SecureStore)
+     * Redirige a la pantalla de inicio
+     */
+    const handleLogout = async () => {
+        await removeToken();
+        router.replace('/');
+    }
+
+    /**
+     * Obtiene los commits de un repositorio [NO FUNCIONA]
+     * @param name nombre del repositorio
+     */
     const handleCommits = async (name: string) => {
         axios.get(url + "/" + name)
             .then((response) => {
@@ -125,16 +176,15 @@ const HomeScreen = () => {
             });
     }
 
-    const handleEdit = async () => {
-        console.log(token);
-        const decodedToken = jwtDecode(token, {header: true});
 
-    }
-
-
-    const handleLogout = async () => {
-        await removeToken();
-        router.replace('/');
+    if (isLoading) {
+        return (
+            <SafeAreaView style={styles.loading}>
+                <Text variant={"displaySmall"}>Repositorios</Text>
+                <ActivityIndicator animating={true} color={"#000"} size={"large"}/>
+                <Text variant={"bodySmall"}>Cargando...</Text>
+            </SafeAreaView>
+        );
     }
 
     return (

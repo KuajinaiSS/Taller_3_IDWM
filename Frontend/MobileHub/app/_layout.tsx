@@ -2,6 +2,9 @@ import {SafeAreaProvider} from "react-native-safe-area-context";
 import {PaperProvider, MD3LightTheme as Theme, Appbar} from "react-native-paper";
 import {Slot} from "expo-router";
 
+/**
+ * Layout de la aplicación principal
+ */
 const HomeLayout = () => {
     return (
 

@@ -6,6 +6,11 @@ import {useEffect, useState} from "react";
 import {router} from "expo-router";
 import axios from "axios";
 
+/**
+ * Guarda el token en el almacenamiento seguro del dispositivo (SecureStore)
+ * @param key nombre del token
+ * @param value valor del token
+ */
 const saveToken = async (key: any, value: any) => {
     try {
         await SecureStore.setItemAsync(key, value);
@@ -14,6 +19,10 @@ const saveToken = async (key: any, value: any) => {
     }
 }
 
+/**
+ * Obtiene el token del almacenamiento seguro del dispositivo (SecureStore)
+ * @param key nombre del token
+ */
 const getValueFor = async (key: any) => {
     try {
         return await SecureStore.getItemAsync(key);
@@ -23,6 +32,10 @@ const getValueFor = async (key: any) => {
     }
 }
 
+
+/**
+ * Pantalla de inicio de sesión
+ */
 const LoginScreen = () => {
     const url = "http://192.168.4.43:5148/api/Auth/login";
 
@@ -37,6 +50,11 @@ const LoginScreen = () => {
         password: ''
     };
 
+    /**
+     * Verifica si existe un token en el almacenamiento seguro del dispositivo (SecureStore)
+     * Si existe, redirige a la pantalla de inicio
+     * Si no existe, se queda en la pantalla de inicio de sesión
+     */
     useEffect(() => {
         const fetchToken = async () => {
             const token = await getValueFor("token");
@@ -47,21 +65,41 @@ const LoginScreen = () => {
         fetchToken();
     }, []);
 
+
+    /**
+     * Actualiza el estado del email con el valor del input de email
+     * @param email valor del input de email
+     */
     const handleEmailChange = (email: any) => {
         setEmail(email);
         console.log(email);
     }
 
+
+    /**
+     * Actualiza el estado de la contraseña con el valor del input de contraseña
+     * @param password valor del input de contraseña
+     */
     const handlePasswordChange = (password: string) => {
         setPassword(password);
         console.log(password);
     }
 
+
+    /**
+     * Actualiza el estado de HidePassword para mostrar o no la contraseña
+     */
     const handleShowPassword = () => {
         setHidePassword(!HidePassword);
         console.log("Show password");
     }
 
+
+    /**
+     * Valida los datos de inicio de sesión
+     * Si los datos son válidos, inicia sesión y guarda el token en el almacenamiento seguro del dispositivo (SecureStore)
+     * Si los datos no son válidos, muestra un mensaje de error
+     */
     const handleSubmit = () => {
         if (!email || !password) {
             setMsgError("Por favor, rellene todos los campos");

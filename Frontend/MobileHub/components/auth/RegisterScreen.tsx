@@ -1,16 +1,24 @@
 import {SafeAreaView} from "react-native-safe-area-context";
-import {Image, ScrollView, StyleSheet, Text, View} from "react-native";
+import {ScrollView, StyleSheet, Text, View} from "react-native";
 import {Button, HelperText, TextInput} from "react-native-paper";
-// import Styles from "../../constants/Styles";
 import {useState} from "react";
 import {router} from "expo-router";
 import axios from "axios";
 import * as SecureStore from "expo-secure-store";
 
+/**
+ * Guarda el token en el almacenamiento seguro del dispositivo (SecureStore)
+ * @param key nombre del token 
+ * @param value valor del token 
+ */
 async function saveToken(key: string, value: any) {
     await SecureStore.setItemAsync(key, value);
 }
 
+
+/**
+ * Pantalla de registro
+ */
 const RegisterScreen = () => {
     const url = "http://192.168.4.43:5148/api/Auth/register";
     const data = {
@@ -29,28 +37,51 @@ const RegisterScreen = () => {
     const [error, setError] = useState(false);
     const [msgError, setMsgError] = useState("");
 
+
+    /**
+     * cambia el email del usuario
+     * @param email email del usuario
+     */
     const handleEmailChange = (email: string) => {
         setEmail(email);
         console.log(email);
     }
 
+    /**
+     * cambia el nombre del usuario
+     * @param name nombre del usuario
+     */
     const handleNameChange = (name: string) => {
         setName(name);
         console.log(name);
     }
 
+    /**
+     * cambia el rut del usuario
+     * @param rut rut del usuario
+     */
     const handleRutChange = (rut: string) => {
         setRut(rut);
         console.log(rut);
     }
 
+    /**
+     * cambia el año de nacimiento del usuario
+     * @param bornYear año de nacimiento del usuario
+     */
     const handleBornYearChange = (bornYear: string) => {
         const numericValue = bornYear.replace(/[^0-9]/g, '');
         setBornYear(numericValue);
     };
 
 
-
+    /**
+     * envia los datos al backend para registrarse
+     * si no se rellenan todos los campos, muestra un mensaje de error
+     * si se rellenan todos los campos, envia los datos al backend
+     * si el backend responde con un error, muestra un mensaje de error
+     * si el backend responde con un token, guarda el token en el almacenamiento seguro del dispositivo (SecureStore) y redirige a la pantalla de inicio
+     */
     const handleSubmit = () => {
 
         if (!email || !name || !rut || !bornYear) {
