@@ -3,6 +3,9 @@ using MobileHub.DataAnnotations;
 
 namespace MobileHub.DTO
 {
+    /***
+     * Clase para mapear los datos de un usuario que se registra en la aplicacion
+     */
     public class RegisterDto
     {
         [Required]

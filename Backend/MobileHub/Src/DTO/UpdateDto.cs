@@ -2,6 +2,9 @@ using MobileHub.DataAnnotations;
 
 namespace MobileHub.DTO
 {
+    /***
+     * Clase para mapear los datos de un usuario que se registra en la aplicacion
+     */
     public class UpdateDto
     {
         public string Username { get; set; } = null!;

@@ -26,8 +26,11 @@ namespace MobileHub.Src.Controllers
         }
 
 
-        // Metodo Login
-        // la ruta es localhost:5001/api/auth/login (POST)
+        /***
+         * Metodo para logear un usuario en la base de datos en la ruta :5148/api/auth/login (POST)
+         * @param LoginDto datos del usuario a logear
+         * @return string retorna el token del usuario
+         */
         [HttpPost("login")]
         public async Task<ActionResult<string>> Login(LoginDto loginDto)
         {
@@ -44,8 +47,11 @@ namespace MobileHub.Src.Controllers
 
 
 
-        // Metodo Register
-        // la ruta es localhost:5001/api/auth/register (POST)
+        /***
+         * Metodo para registrar un usuario en la base de datos en la ruta :5148/api/auth/register (POST)
+         * @param RegisterDto datos del usuario a registrar
+         * @return string retorna el token del usuario
+         */
         [HttpPost("register")]
         public async Task<ActionResult<string>> Register(RegisterDto registerDto)
         {
@@ -70,7 +76,11 @@ namespace MobileHub.Src.Controllers
             return Ok(token);
         }
 
-
+        /***
+         * Metodo para crear el token
+         * @param User usuario que se le creara el token
+         * @return string retirna el token del usuario
+         */
         private string CreateToken(User user)
         {
             var claims = new List<Claim>{

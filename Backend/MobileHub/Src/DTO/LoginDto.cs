@@ -2,6 +2,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace MobileHub.DTO
 {
+    /***
+     * Clase para mapear los datos de un usuario que se logea en la aplicacion
+     */
     public class LoginDto
     {
         [Required (ErrorMessage = "El campo Usuario es obligatorio para iniciar sesión")]

@@ -14,7 +14,10 @@ namespace MobileHub.Controllers
     public class RepositoriesController : ControllerBase
     {
 
-        // la ruta es localhost:5001/api/repositories (GET)
+        /***
+         * Metodo para obtener los repositorios de un usuario en la ruta :5148/api/repositories (GET)
+         * @return IEnumerable<RepositoryDto> retorna los repositorios del usuario
+         */
         [HttpGet]
         public async Task<ActionResult<IEnumerable<RepositoryDto>>> GetAll() // para usar commits <GitHubCommit>, para repositorios <Repository>
         {
@@ -45,13 +48,17 @@ namespace MobileHub.Controllers
                 return entity;
             });
 
-            // mappedRepositories = mappedRepositories.OrderByDescending(repository => repository.CreatedAt).ToList();
-
-
             return Ok(mappedRepositories);
 
         }
 
+
+        /***
+         * Metodo para obtener la cantidad de commits de un repositorio
+         * @param GitHubClient cliente de github
+         * @param string nombre del repositorio
+         * @return int retorna la cantidad de commits del repositorio
+         */
         private async Task<int> GetCommitAmountByRepository(GitHubClient client, string repositoryName)
         {
             var commits = await client.Repository.Commit.GetAll("Dizkm8", repositoryName);
@@ -60,8 +67,11 @@ namespace MobileHub.Controllers
             return commits.Count();
         }
 
-        // ver los commits de un repositorio
-        // la ruta es localhost:5001/api/repositories/{repositoryName} (GET)
+        /***
+         * Metodo para obtener los commits de un repositorio en la ruta :5148/api/repositories/{repositoryName} (GET)
+         * @param string nombre del repositorio
+         * @return IEnumerable<CommitDto> retorna los commits del repositorio
+         */
         [HttpGet("{repositoryName}")]
         public async Task<ActionResult<IEnumerable<CommitDto>>> GetCommitsByRepository(string repositoryName)
         {

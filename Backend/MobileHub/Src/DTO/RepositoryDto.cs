@@ -1,5 +1,8 @@
 namespace MobileHub.DTO
 {
+    /***
+     * Clase para mapear los datos de un repositorio
+     */
     public class RepositoryDto
     {
         public string name { get; set; } = null!;

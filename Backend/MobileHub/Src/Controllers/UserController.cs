@@ -10,16 +10,30 @@ namespace MobileHub.Src.Controllers
     [Route("api/[controller]")]
     public class UserController : ControllerBase
     {
+        /***
+         * Metodo para obtener los usuarios en la ruta :5148/api/user (GET)
+         * @return IEnumerable<User> retorna los usuarios
+         */
         private readonly DataContext _context;
 
 
+
+        /***
+         * Constructor de la clase UserController
+         * @param DataContext contexto de la base de datos
+         */
         public UserController(DataContext context)
         {
             _context = context;
         }
 
-        // buscar usuario por email
-        // la ruta es localhost:5001/api/user/{email} (GET)
+
+
+        /***
+         * Metodo para obtener un usuario por su id en la ruta :5148/api/user/{id} (GET)
+         * @param int id del usuario a obtener
+         * @return User retorna el usuario
+         */
         [HttpGet("{email}")]
         public async Task<ActionResult<User>> GetByEmail(string email)
         {
@@ -29,7 +43,11 @@ namespace MobileHub.Src.Controllers
         }
 
 
-        // la ruta es localhost:5001/api/user (GET)
+
+        /***
+         * Metodo para obtener todos los usuarios en la ruta :5148/api/user (GET)
+         * @return IEnumerable<User> retorna los usuarios
+         */
         [HttpGet]
         public async Task<ActionResult<IEnumerable<User>>> GetAll()
         {
@@ -37,8 +55,13 @@ namespace MobileHub.Src.Controllers
             return Ok(users);
         }
 
-        // editar usuario
-        // la ruta es localhost:5001/api/user/{id} (PUT)
+
+
+        /***
+         * Metodo para registrar un usuario en la base de datos en la ruta :5148/api/user/register (POST)
+         * @param RegisterDto datos del usuario a registrar
+         * @return string retorna el token del usuario
+         */
         [HttpPut("{id}")]
         public async Task<ActionResult> Update(int id, UpdateDto updateDto)
         {

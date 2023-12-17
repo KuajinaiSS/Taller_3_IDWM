@@ -6,7 +6,8 @@ import {Repository} from "../../models/Repository";
 import axios from "axios";
 import {router} from "expo-router";
 import * as SecureStore from 'expo-secure-store';
-import { jwtDecode } from "jwt-decode";
+import {jwtDecode} from "jwt-decode";
+import {Commit} from "../../models/Commit";
 
 const getTokenAndPrint = async () => {
     try {
@@ -21,6 +22,8 @@ const getTokenAndPrint = async () => {
 
 
 const HomeScreen = () => {
+    const url = "http://192.168.4.43:5148/Repositories";
+    const [commits, setCommits] = useState<Commit[]>([]);
 
     async function getValueFor(key) {
         const result = await SecureStore.getItemAsync(key);
@@ -73,13 +76,11 @@ const HomeScreen = () => {
     const [repositories, setRepositories] = useState<Repository[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
-    const url = "http://192.168.4.43:5148/Repositories";
 
     useEffect(() => {
         const fetchData = async () => {
             setIsLoading(true);
             try {
-
                 const token = await getTokenAndPrint();
                 setToken(token);
 
@@ -114,12 +115,23 @@ const HomeScreen = () => {
         );
     }
 
-    const handleEdit = async  () => {
-        console.log(token);
+    const handleCommits = async (name: string) => {
+        axios.get(url + "/" + name)
+            .then((response) => {
+                console.log(response.data);
+                setCommits(response.data);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }
 
-        const decodedToken = jwtDecode(token, { header: true });
+    const handleEdit = async () => {
+        console.log(token);
+        const decodedToken = jwtDecode(token, {header: true});
 
     }
+
 
     const handleLogout = async () => {
         await removeToken();
@@ -150,8 +162,7 @@ const HomeScreen = () => {
                                 </Card.Content>
 
                                 <Card.Actions>
-                                    <Button mode={"contained"}
-                                            onPress={() => console.log("Mas detalles " + repository.name)}>
+                                    <Button mode={"contained"} >
                                         <Text variant={"bodySmall"}> Ver detalles</Text>
                                     </Button>
                                 </Card.Actions>
@@ -160,9 +171,9 @@ const HomeScreen = () => {
                     })}
                 </ScrollView>
 
-                
+
                 <Portal>
-                    <Modal visible={visible} onDismiss={() => setVisible(false)} contentContainerStyle={styles.modal }>
+                    <Modal visible={visible} onDismiss={() => setVisible(false)} contentContainerStyle={styles.modal}>
                         <Text style={styles.title}>Editar usuario</Text>
 
                         <TextInput style={styles.input} label="Nombre" placeholder={"Italo Donoso"}
@@ -170,7 +181,8 @@ const HomeScreen = () => {
                                    onChangeText={handleNameChange}/>
 
                         <TextInput style={styles.input} label="Email" placeholder="nombre@alumnos.ucn.cl"
-                                   placeholderTextColor={"#B2B2B2"} autoComplete={"email"} mode={"outlined"} value={email}
+                                   placeholderTextColor={"#B2B2B2"} autoComplete={"email"} mode={"outlined"}
+                                   value={email}
                                    onChangeText={handleEmailChange}/>
 
                         <TextInput style={styles.input} label="Año de Nacimiento" placeholder={"2001"}
@@ -179,10 +191,12 @@ const HomeScreen = () => {
                                    onChangeText={handleBornYearChange}/>
 
                         <TextInput style={styles.input} label="Contraseña" placeholder={"207344842"}
-                                   placeholderTextColor={"#B2B2B2"} autoComplete={"email"} mode={"outlined"} value={password}
+                                   placeholderTextColor={"#B2B2B2"} autoComplete={"email"} mode={"outlined"}
+                                   value={password}
                                    onChangeText={handlePasswordChange} secureTextEntry={HidePassword}
                                    right={
-                                       <TextInput.Icon icon={HidePassword ? "eye-off" : "eye"} onPress={handleShowPassword}/>
+                                       <TextInput.Icon icon={HidePassword ? "eye-off" : "eye"}
+                                                       onPress={handleShowPassword}/>
                                    }/>
 
 
