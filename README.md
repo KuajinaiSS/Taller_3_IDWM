@@ -61,7 +61,7 @@ npm install
 npm run start
 ```
 
-## en el LoginScreen.tsx y en el registerScreen.tsx tienes que colocar tu url como corresponde segun tu ipconfig
+### en el LoginScreen.tsx y en el registerScreen.tsx tienes que colocar tu url como corresponde segun tu ipconfig
 
-## igual mencionar que el metodo del frontend que obtiene los commits por repositorios no funciona
-## NO LO INTENTES HACER FUNCIONAR, perdi mi token de Github, PERO FUNCIONA BIEN EN POSTMAN Y SWAGGER
+#### igual mencionar que el metodo del frontend que obtiene los commits por repositorios no funciona
+#### NO LO INTENTES HACER FUNCIONAR, perdi mi token de Github, PERO FUNCIONA BIEN EN POSTMAN Y SWAGGER
