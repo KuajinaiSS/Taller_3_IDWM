@@ -16,6 +16,10 @@ namespace MobileHub.DataAnnotations
         {
         }
 
+
+        /**
+         * Valida que el rut sea valido
+         */
         public override bool IsValid(object? value)
         {
             if(value is not string rut) return false;

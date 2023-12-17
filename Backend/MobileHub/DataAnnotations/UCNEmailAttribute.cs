@@ -18,6 +18,9 @@ namespace MobileHub.DataAnnotations
         {
         }
 
+        /**
+         * Valida que el email sea valido y que pertenezca al dominio de la UCN
+         */
         public override bool IsValid(object? value)
         {
             if(value is not string email) return false;

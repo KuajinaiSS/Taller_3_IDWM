@@ -16,6 +16,9 @@ namespace MobileHub.DataAnnotations
         {
         }
 
+        /**
+         * Valida que el año sea mayor a 1900 y menor al año actual
+         */
         public override bool IsValid(object? value)
         {
             if (value is not int year) return false;

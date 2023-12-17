@@ -4,11 +4,15 @@ namespace MobileHub.Common
 {
     public static partial class RegularExpressions
     {
-        // Regex for validating a email
+        /**
+        * Expression regular para validar un email de la UCN
+        */
         [GeneratedRegex("^([a-zA-Z]+\\.)*ucn\\.cl$", RegexOptions.Compiled)]
         public static partial Regex UCNEmailDomainRegex();
 
-        // Regex for validating a rut
+        /**
+        * Expression regular para validar el rut de un usuario
+        */
         [GeneratedRegex(@"^\d{7,8}-[\dkK]$", RegexOptions.Compiled)]
         public static partial Regex RutRegex();
 
