@@ -104,7 +104,7 @@ const RegisterScreen = () => {
             .then((response) => {
                 console.log(response.data);
                 saveToken("token", response.data);
-                router.replace("/home");
+                router.replace("/home", {email: data.email});
             })
             .catch((error) => {
                 console.log("Error: " + error.response.data);

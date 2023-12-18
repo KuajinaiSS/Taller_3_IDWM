@@ -4,123 +4,65 @@ import {SafeAreaView} from "react-native-safe-area-context";
 import {useEffect, useState} from "react";
 import {Repository} from "../../models/Repository";
 import axios from "axios";
-import {router} from "expo-router";
+import {router, useLocalSearchParams} from "expo-router";
 import * as SecureStore from 'expo-secure-store';
-import {jwtDecode} from "jwt-decode";
+
+import React from "react";
+import {User} from "../../models/User";
 import {Commit} from "../../models/Commit";
 
-/**
- * Guarda el token en el almacenamiento seguro del dispositivo (SecureStore)
- * @param key nombre del token
- * @param value valor del token
- */
-const getTokenAndPrint = async () => {
-    try {
-        const token = await SecureStore.getItemAsync('token');
-        console.log('Token:', token);
-        return token;
-    } catch (error) {
-        console.error('Error al obtener el token:', error);
-        return null;
-    }
-};
 
 /**
  * Pantalla de inicio
  */
 const HomeScreen = () => {
     const url = "http://192.168.4.43:5148/Repositories";
+
     const [commits, setCommits] = useState<Commit[]>([]);
-    const [email, setEmail] = useState("");
-    const [name, setName] = useState("");
-    const [password, setPassword] = useState("");
-    const [bornYear, setBornYear] = useState("");
     const [HidePassword, setHidePassword] = useState(true);
-    const [token, setToken] = useState("");
     const [visible, setVisible] = useState(false);
     const [repositories, setRepositories] = useState<Repository[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
-    const Newdata = {
-        email: '',
-        password: '',
-        username: '',
+    const [user, setUser] = useState<User>({
+        email: "",
+        username: "",
+        password: "",
         yearBirth: 0,
-    };
-    const Logeduser = {
         id: 0,
-        email: '',
-        password: '',
-        username: '',
-        yearBirth: 0,
-    };
+        rut: ""
+    });
+
 
     /**
-     * Obtiene los datos del usuario logeado y los guarda en el estado Logeduser 
+     * Obtiene los repositorios del usuario logeado
+     * y coloca el estado de isLoading en true mientras se obtienen los datos
      */
     useEffect(() => {
-        const fetchData = async () => {
-            setIsLoading(true);
-            try {
-                const token = await getTokenAndPrint();
-
-                const response = await axios.get(url);
+        setIsLoading(true);
+        axios.get(url)
+            .then((response) => {
                 setRepositories(response.data);
-
-            } catch (error) {
-                console.log("Error fetching data:", error);
-            } finally {
+            })
+            .catch((error) => {
+                console.log(error);
+            })
+            .finally(() => {
                 setIsLoading(false);
-            }
-        };
-        fetchData();
+            });
     }, []);
 
 
     /**
-     * Obtiene el token del almacenamiento seguro del dispositivo (SecureStore)
-     * @param key nombre del token
+     * Actualiza los datos del usuario logeado segun el campo y el valor ingresado
+     * @param field nombre del campo a actualizar
+     * @param value valor del campo a actualizar
      */
-    
-    async function getValueFor(key: any) {
-        const result = await SecureStore.getItemAsync(key);
+    const handleUserChange = (field: string, value: string) => {
+        setUser({...user, [field]: value});
+        console.log(user);
     }
 
-    /**
-     * cambia el email del usuario 
-     * @param email email del usuario
-     */
-    const handleEmailChange = (email: string) => {
-        setEmail(email);
-        console.log(email);
-    }
-
-    /**
-     * cambia el nombre del usuario
-     * @param name nombre del usuario
-     */
-    const handleNameChange = (name: string) => {
-        setName(name);
-        console.log(name);
-    }
-
-    /**
-     * cambia el año de nacimiento del usuario
-     * @param bornYear año de nacimiento del usuario
-     */
-    const handleBornYearChange = (bornYear: string) => {
-        const numericValue = bornYear.replace(/[^0-9]/g, '');
-        setBornYear(numericValue);
-    };
-
-    /**
-     * cambia la contraseña del usuario
-     * @param password contraseña del usuario
-     */
-    const handlePasswordChange = (password: string) => {
-        setPassword(password);
-        console.log(password);
-    }
 
     /**
      * Actualiza el estado de HidePassword para mostrar o no la contraseña
@@ -131,24 +73,9 @@ const HomeScreen = () => {
     }
 
     /**
-     * Elimina el token del almacenamiento seguro del dispositivo (SecureStore)
-     */
-    const removeToken = async () => {
-        try {
-            await SecureStore.deleteItemAsync('token');
-            console.log('Token eliminado exitosamente');
-        } catch (error) {
-            console.error('Error al eliminar el token:', error);
-        }
-    };
-
-    /**
-     * Actualiza los datos del usuario logeado
+     * Actualiza los datos del usuario logeado [TODO]
      */
     const handleEdit = async () => {
-        console.log(token);
-        const decodedToken = jwtDecode(token, {header: true});
-
     }
 
     /**
@@ -157,8 +84,8 @@ const HomeScreen = () => {
      * Redirige a la pantalla de inicio
      */
     const handleLogout = async () => {
-        await removeToken();
-        router.replace('/');
+        await SecureStore.deleteItemAsync('token');
+        router.replace("/", {email: ""});
     }
 
     /**
@@ -190,7 +117,7 @@ const HomeScreen = () => {
     return (
         <>
             <Appbar.Header style={styles.appBar}>
-                <Appbar.Content title="Repositorios"/>
+                <Appbar.Content title={"userEmail"}/>
                 <Appbar.Action icon="account-edit" onPress={() => setVisible(true)}/>
                 <Appbar.Action icon="exit-to-app" onPress={handleLogout}/>
             </Appbar.Header>
@@ -211,7 +138,7 @@ const HomeScreen = () => {
                                 </Card.Content>
 
                                 <Card.Actions>
-                                    <Button mode={"contained"} >
+                                    <Button mode={"contained"}>
                                         <Text variant={"bodySmall"}> Ver detalles</Text>
                                     </Button>
                                 </Card.Actions>
@@ -226,23 +153,24 @@ const HomeScreen = () => {
                         <Text style={styles.title}>Editar usuario</Text>
 
                         <TextInput style={styles.input} label="Nombre" placeholder={"Italo Donoso"}
-                                   placeholderTextColor={"#B2B2B2"} autoComplete={"name"} mode={"outlined"} value={name}
-                                   onChangeText={handleNameChange}/>
+                                   placeholderTextColor={"#B2B2B2"} autoComplete={"name"} mode={"outlined"}
+                                   value={user.username}
+                                   id={"username"} onChangeText={(text) => handleUserChange("username", text)}/>
 
                         <TextInput style={styles.input} label="Email" placeholder="nombre@alumnos.ucn.cl"
                                    placeholderTextColor={"#B2B2B2"} autoComplete={"email"} mode={"outlined"}
-                                   value={email}
-                                   onChangeText={handleEmailChange}/>
+                                   value={user.email}
+                                   id={"email"} onChangeText={(text) => handleUserChange("email", text)}/>
 
                         <TextInput style={styles.input} label="Año de Nacimiento" placeholder={"2001"}
                                    placeholderTextColor={"#B2B2B2"} autoComplete={"birthdate-year"} mode={"outlined"}
-                                   value={bornYear} keyboardType="numeric"
-                                   onChangeText={handleBornYearChange}/>
+                                   value={String(user.yearBirth)} keyboardType="numeric"
+                                   id={"yearBirth"} onChangeText={(text) => handleUserChange("yearBirth", text)}/>
 
                         <TextInput style={styles.input} label="Contraseña" placeholder={"207344842"}
                                    placeholderTextColor={"#B2B2B2"} autoComplete={"email"} mode={"outlined"}
-                                   value={password}
-                                   onChangeText={handlePasswordChange} secureTextEntry={HidePassword}
+                                   value={user.password} id={"password"} secureTextEntry={HidePassword}
+                                   onChangeText={(text) => handleUserChange("password", text)}
                                    right={
                                        <TextInput.Icon icon={HidePassword ? "eye-off" : "eye"}
                                                        onPress={handleShowPassword}/>

@@ -6,36 +6,7 @@ import {useEffect, useState} from "react";
 import {router} from "expo-router";
 import axios from "axios";
 
-/**
- * Guarda el token en el almacenamiento seguro del dispositivo (SecureStore)
- * @param key nombre del token
- * @param value valor del token
- */
-const saveToken = async (key: any, value: any) => {
-    try {
-        await SecureStore.setItemAsync(key, value);
-    } catch (error) {
-        console.error('Error al guardar el token:', error);
-    }
-}
 
-/**
- * Obtiene el token del almacenamiento seguro del dispositivo (SecureStore)
- * @param key nombre del token
- */
-const getValueFor = async (key: any) => {
-    try {
-        return await SecureStore.getItemAsync(key);
-    } catch (error) {
-        console.error('Error al obtener el token:', error);
-        return null;
-    }
-}
-
-
-/**
- * Pantalla de inicio de sesión
- */
 const LoginScreen = () => {
     const url = "http://192.168.4.43:5148/api/Auth/login";
 
@@ -53,18 +24,17 @@ const LoginScreen = () => {
     };
 
     /**
-     * Verifica si existe un token en el almacenamiento seguro del dispositivo (SecureStore)
-     * Si existe, redirige a la pantalla de inicio
-     * Si no existe, se queda en la pantalla de inicio de sesión
+     * Verifica si el usuario ya inició sesión anteriormente y lo redirige a la pantalla de inicio mediante el token
+     * Si el usuario no ha iniciado sesión, lo deja en la pantalla de inicio de sesión
      */
     useEffect(() => {
-        const fetchToken = async () => {
-            const token = await getValueFor("token");
-            if (token) {
-                router.replace("/home");
-            }
-        };
-        fetchToken();
+        SecureStore.getItemAsync("token")
+            .then((token) => {
+                console.log("LOGIN: " + token)
+                if (token) {
+                    router.replace("/home", {email: token});
+                }
+            });
     }, []);
 
 
@@ -102,7 +72,7 @@ const LoginScreen = () => {
      * Si los datos son válidos, inicia sesión y guarda el token en el almacenamiento seguro del dispositivo (SecureStore)
      * Si los datos no son válidos, muestra un mensaje de error
      */
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         setLoading(true);
         setDisabled(true);
 
@@ -118,10 +88,10 @@ const LoginScreen = () => {
         data.password = password;
 
         axios.post(url, data)
-            .then((response) => {
+            .then(async (response) => {
                 console.log(response.data);
-                saveToken("token", response.data);
-                router.replace("/home");
+                await SecureStore.setItemAsync("token", response.data);
+                router.replace("/home", {email: data.email});
             })
             .catch((error) => {
                 console.log(error.response.data);
@@ -154,7 +124,8 @@ const LoginScreen = () => {
                 {msgError}
             </HelperText>
 
-            <Button style={styles.button} icon="login" mode="contained" onPress={handleSubmit} loading={loading} disabled={disabled}>
+            <Button style={styles.button} icon="login" mode="contained" onPress={handleSubmit} loading={loading}
+                    disabled={disabled}>
                 Iniciar sesión
             </Button>
         </SafeAreaView>
